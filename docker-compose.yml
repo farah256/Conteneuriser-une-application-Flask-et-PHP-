@@ -1,0 +1,28 @@
+version: '3'
+services:
+  api:
+    image: student-api
+    volumes:
+      - ./student_age.json:/data/student_age.json
+    ports:
+      - "5000:5000"
+    networks:
+      - student-network
+
+  website:
+    image: php:apache
+    environment:
+      - USERNAME=root
+      - PASSWORD=root
+    volumes:
+      - ./website:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - student-network
+
+networks:
+  student-network:
+    driver: bridge
